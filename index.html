@@ -496,7 +496,7 @@
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
     // Enviar datos al servidor
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRhDn_Kz0xIm4fzO9TdxHHqKkp90ODVG0Drd8gd9OMi9_moMpEC0JceCH8oJyKkd3Z/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx76AbUj5M_tGAYlQnXU2Otu6w2mzt-sexn9Mo7s10rMWQKiXqENJL2v3-weukWQPph/exec";
     const payload = {
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
