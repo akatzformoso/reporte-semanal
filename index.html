@@ -497,6 +497,7 @@
 
     // Enviar datos al servidor
     const SCRIPT_URL = "https://formspree.io/f/xpqbyyep";
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbzmVOkSs2nVWN8WkCTWFIyy7G8ajm0jwwKd9I31B22Cy9uHB0Lks5fQ_yvyQ55JTrk/exec";
     const payload = {
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
@@ -513,11 +514,17 @@
       urgencias: urgT, cobros: cobT
     };
 
+    // Enviar email via Formspree
     fetch(SCRIPT_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify(payload)
     }).catch(()=>{});
+
+    // Guardar en Google Sheet
+    const params = new URLSearchParams(payload).toString();
+    const img = new Image();
+    img.src = SHEET_URL + '?' + params;
 
     document.getElementById('resumen-texto').textContent=
 `REPORTE SEMANAL
