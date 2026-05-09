@@ -496,7 +496,7 @@
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
     // Enviar datos al servidor
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5rGTJLFFAhKbOktj5Vv-QTpNI0b1KTeX-fqXCXQBtGdun1nvLSXwQXZ0G4Y55-YmZ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzRhDn_Kz0xIm4fzO9TdxHHqKkp90ODVG0Drd8gd9OMi9_moMpEC0JceCH8oJyKkd3Z/exec";
     const payload = {
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
@@ -513,21 +513,9 @@
       urgencias: urgT, cobros: cobT
     };
 
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = SCRIPT_URL;
-    form.target = 'hidden_iframe';
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'data';
-    input.value = JSON.stringify(payload);
-    form.appendChild(input);
-    const iframe = document.createElement('iframe');
-    iframe.name = 'hidden_iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
-    form.submit();
+    const params = new URLSearchParams(payload).toString();
+    const img = new Image();
+    img.src = SCRIPT_URL + '?' + params;
 
     document.getElementById('resumen-texto').textContent=
 `REPORTE SEMANAL
