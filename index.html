@@ -495,6 +495,26 @@
 
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
+    // Enviar datos al servidor
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxP6J0cDUf_rOfs1i4RnV0UnDF81XKi57AO_zrdEZjE1xS-q-DfKCv7EJDMLEVZlfOo/exec";
+    const payload = {
+      fecha: fmtDate(fch), supervisor: sup, servicio: srv,
+      novedades: document.getElementById('novedades').value.trim(),
+      pendientes: document.getElementById('pendientes').value.trim(),
+      ausencias: ausT, hayPAE: state.pae ? "Sí" : "No",
+      paeServicio: document.getElementById('pae-servicio').value,
+      paeNovedades: document.getElementById('pae-novedades').value.trim(),
+      hayMP: state.mp ? "Sí" : "No",
+      mpObs: document.getElementById('mp-obs').value.trim(),
+      hayMenu: state.menu ? "Sí" : "No", menuDetalle: menuT,
+      enviosCoordinar: ecoordT, enviosPendientes: ependT,
+      checklist: getChkStatus(chkSemanaItems),
+      finMes: state.fm ? getChkStatus(chkFinMesItems) : "",
+      urgencias: urgT, cobros: cobT
+    };
+    fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) })
+      .catch(()=>{}); // silencioso, no bloquea la UI
+
     document.getElementById('resumen-texto').textContent=
 `REPORTE SEMANAL
 ═══════════════════════════════════════
