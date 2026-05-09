@@ -496,7 +496,7 @@
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
     // Enviar datos al servidor
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx76AbUj5M_tGAYlQnXU2Otu6w2mzt-sexn9Mo7s10rMWQKiXqENJL2v3-weukWQPph/exec";
+    const SCRIPT_URL = "https://formspree.io/f/xpqbyyep";
     const payload = {
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
@@ -513,9 +513,11 @@
       urgencias: urgT, cobros: cobT
     };
 
-    const params = new URLSearchParams(payload).toString();
-    const img = new Image();
-    img.src = SCRIPT_URL + '?' + params;
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+    }).catch(()=>{});
 
     document.getElementById('resumen-texto').textContent=
 `REPORTE SEMANAL
