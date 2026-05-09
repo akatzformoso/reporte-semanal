@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte Semanal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; padding: 24px 16px; }
+  .container { max-width: 820px; margin: 0 auto; }
+  .header { background: linear-gradient(135deg, #1e3a5f, #2e6da4); color: white; border-radius: 12px 12px 0 0; padding: 28px 32px; }
+  .header h1 { font-size: 1.5rem; font-weight: 700; }
+  .header p { opacity: 0.85; margin-top: 4px; font-size: 0.9rem; }
+  .form-body { background: white; border-radius: 0 0 12px 12px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+  .section { margin-bottom: 32px; border-bottom: 1px solid #f0f4f8; padding-bottom: 32px; }
+  .section:last-of-type { border-bottom: none; }
+  .section-title { font-size: 1rem; font-weight: 700; color: #1e3a5f; border-left: 4px solid #2e6da4; padding-left: 12px; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
+  input[type="text"], input[type="date"], input[type="number"], select, textarea {
+    width: 100%; padding: 9px 13px; border: 1.5px solid #d1d5db; border-radius: 8px;
+    font-size: 0.88rem; color: #111; transition: border-color 0.2s; background: #fafafa; font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #2e6da4; background: white; }
+  textarea { resize: vertical; min-height: 80px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .toggle-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .toggle-label { font-size: 0.88rem; font-weight: 600; color: #374151; }
+  .toggle { display: flex; gap: 8px; }
+  .toggle button { padding: 6px 18px; border: 1.5px solid #d1d5db; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #6b7280; transition: all 0.2s; }
+  .toggle button.active-yes { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
+  .toggle button.active-no { border-color: #16a34a; background: #f0fdf4; color: #16a34a; }
+  .card { background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 10px; }
+  .card-yellow { background: #fffbeb; border-color: #fde68a; }
+  .card-red { background: #fff1f2; border-color: #fca5a5; }
+  .btn-remove { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.82rem; font-weight: 700; float: right; }
+  .btn-add { background: none; border: 1.5px dashed #2e6da4; color: #2e6da4; padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 0.83rem; font-weight: 600; margin-top: 8px; }
+  .btn-add-warn { border-color: #d97706; color: #d97706; }
+  .btn-add-red { border-color: #dc2626; color: #dc2626; }
+  .urgencia-badge { display: inline-block; background: #dc2626; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; }
+  .chk-item { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:8px; margin-bottom:7px; background:#f9fafb; border:1.5px solid #e5e7eb; cursor:pointer; user-select:none; transition:all 0.15s; }
+  .chk-item:hover { border-color:#93c5fd; background:#f0f7ff; }
+  .chk-item.checked { background:#f0fdf4; border-color:#86efac; }
+  .chk-item input[type="checkbox"] { width:17px; height:17px; accent-color:#16a34a; cursor:pointer; flex-shrink:0; }
+  .chk-item span.lbl { font-size:0.87rem; font-weight:500; color:#374151; flex:1; }
+  .chk-item.checked span.lbl { color:#15803d; }
+  .chk-tick { font-size:0.95rem; opacity:0; transition:opacity 0.15s; }
+  .chk-item.checked .chk-tick { opacity:1; }
+  .chk-item.finmes { background:#eff6ff; border-color:#93c5fd; }
+  .chk-item.finmes:hover { background:#dbeafe; }
+  .chk-item.finmes.checked { background:#dbeafe; border-color:#3b82f6; }
+  .chk-item.finmes.checked span.lbl { color:#1d4ed8; }
+  .finmes-box { background:#eff6ff; border:1.5px solid #93c5fd; border-radius:8px; padding:14px 16px; margin-top:4px; }
+  .finmes-title { font-size:0.8rem; font-weight:700; color:#1d4ed8; margin-bottom:10px; text-transform:uppercase; }
+  .chk-counter { font-size:0.77rem; color:#6b7280; margin-top:6px; }
+  .required { color:#dc2626; }
+  .hint { font-size:0.77rem; color:#6b7280; }
+  .card-title { font-size:0.88rem; font-weight:700; color:#1e3a5f; margin-bottom:4px; }
+  .btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#1e3a5f,#2e6da4); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
+  .btn-submit:hover { opacity:0.9; }
+  #resumen { display:none; background:#f0fdf4; border:2px solid #16a34a; border-radius:12px; padding:28px; margin-top:24px; }
+  #resumen h2 { color:#15803d; margin-bottom:16px; }
+  #resumen pre { font-family:'Segoe UI',sans-serif; font-size:0.87rem; color:#1f2937; white-space:pre-wrap; line-height:1.75; }
+  .btn-nuevo { background:#15803d; color:white; border:none; padding:10px 24px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:16px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📋 Reporte Semanal de Supervisores</h1>
+    <p>Completar cada viernes al cierre de la semana</p>
+  </div>
+  <div class="form-body">
+
+    <!-- 1. DATOS GENERALES -->
+    <div class="section">
+      <div class="section-title">📌 Datos Generales</div>
+      <div class="grid2">
+        <div class="field">
+          <label>Supervisor <span class="required">*</span></label>
+          <select id="supervisor">
+            <option value="">— Seleccioná tu nombre —</option>
+            <option>Carla Mora</option>
+            <option>Rafael da Costa</option>
+            <option>Martina Bentancor</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Servicio <span class="required">*</span></label>
+          <select id="servicio">
+            <option value="">— Seleccioná tu servicio —</option>
+            <option>Ansina</option><option>Liceo 6 TBO</option><option>Liceo 4 TBO</option>
+            <option>Rivera</option><option>Vichadero</option><option>Tranqueras</option>
+            <option>San Gregorio</option><option>La Paloma</option><option>Paso de los Toros</option>
+          </select>
+        </div>
+      </div>
+      <div class="field" style="max-width:220px">
+        <label>Semana que cierra <span class="required">*</span></label>
+        <input type="date" id="fecha">
+      </div>
+    </div>
+
+    <!-- 2. NOVEDADES -->
+    <div class="section">
+      <div class="section-title">📣 Novedades de la Semana</div>
+      <div class="field">
+        <label>Novedades relevantes del servicio</label>
+        <textarea id="novedades" placeholder="Describí las novedades más importantes de la semana..."></textarea>
+      </div>
+      <div class="field">
+        <label>Pendientes para la próxima semana</label>
+        <textarea id="pendientes" placeholder="Tareas, seguimientos o temas que quedan abiertos..."></textarea>
+      </div>
+    </div>
+
+    <!-- 3. RECURSOS LABORALES -->
+    <div class="section">
+      <div class="section-title">👥 Recursos Laborales</div>
+      <div class="toggle-row">
+        <span class="toggle-label">¿Hubo ausencias esta semana?</span>
+        <div class="toggle">
+          <button id="btn-aus-si" onclick="toggleSec('aus',true)">Sí</button>
+          <button id="btn-aus-no" onclick="toggleSec('aus',false)">No</button>
+        </div>
+      </div>
+      <div id="aus-block" style="display:none">
+        <div id="aus-container"></div>
+        <button class="btn-add" onclick="addAusencia()">+ Agregar ausencia</button>
+      </div>
+    </div>
+
+    <!-- 4. VISITA PAE MEDIA -->
+    <div class="section">
+      <div class="section-title">🏥 Visita PAE Media</div>
+      <div class="toggle-row">
+        <span class="toggle-label">¿Hubo visita de PAE Media esta semana?</span>
+        <div class="toggle">
+          <button id="btn-pae-si" onclick="toggleSec('pae',true)">Sí</button>
+          <button id="btn-pae-no" onclick="toggleSec('pae',false)">No</button>
+        </div>
+      </div>
+      <div id="pae-block" style="display:none">
+        <div class="field" style="max-width:320px">
+          <label>Servicio visitado</label>
+          <select id="pae-servicio">
+            <option value="">— Seleccioná el servicio —</option>
+            <option>Ansina</option><option>Liceo 6 TBO</option><option>Liceo 4 TBO</option>
+            <option>Rivera</option><option>Vichadero</option><option>Tranqueras</option>
+            <option>San Gregorio</option><option>La Paloma</option><option>Paso de los Toros</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Resumen de novedades de la visita</label>
+          <textarea id="pae-novedades" placeholder="Describí las novedades, observaciones o indicaciones surgidas durante la visita..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. SEGUIMIENTO OPERATIVO -->
+    <div class="section">
+      <div class="section-title">🔍 Seguimiento Operativo</div>
+
+      <!-- Faltante MP -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">Faltante de Materia Prima</div>
+        <p class="hint" style="margin-bottom:12px">Refiere a discrepancias entre OC y factura al momento de recepcionar MP.</p>
+        <div class="toggle-row">
+          <span class="toggle-label" style="font-size:0.85rem">¿Constató discrepancia entre OC y factura al recepcionar MP?</span>
+          <div class="toggle">
+            <button id="btn-mp-si" onclick="toggleSec('mp',true)">Sí</button>
+            <button id="btn-mp-no" onclick="toggleSec('mp',false)">No</button>
+          </div>
+        </div>
+        <div id="mp-block" style="display:none">
+          <div class="field" style="margin-bottom:0">
+            <label>Indicá el caso puntual</label>
+            <textarea id="mp-obs" placeholder="Describí la discrepancia detectada (producto, cantidad, proveedor, etc.)..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cambio de menú -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">Cambio de Menú</div>
+        <div class="toggle-row" style="margin-top:10px">
+          <span class="toggle-label" style="font-size:0.85rem">¿Hubo cambio de menú esta semana?</span>
+          <div class="toggle">
+            <button id="btn-menu-si" onclick="toggleSec('menu',true)">Sí</button>
+            <button id="btn-menu-no" onclick="toggleSec('menu',false)">No</button>
+          </div>
+        </div>
+        <div id="menu-block" style="display:none">
+          <div id="menu-container"></div>
+          <button class="btn-add" onclick="addMenu()">+ Agregar cambio de menú</button>
+        </div>
+      </div>
+
+      <!-- Envíos de planta -->
+      <div class="card">
+        <div class="card-title" style="margin-bottom:14px">Envíos de Planta</div>
+        <div class="toggle-row">
+          <span class="toggle-label" style="font-size:0.85rem">¿Hay envíos a coordinar?</span>
+          <div class="toggle">
+            <button id="btn-ecoord-si" onclick="toggleSec('ecoord',true)">Sí</button>
+            <button id="btn-ecoord-no" onclick="toggleSec('ecoord',false)">No</button>
+          </div>
+        </div>
+        <div id="ecoord-block" style="display:none; margin-bottom:14px">
+          <div id="ecoord-container"></div>
+          <button class="btn-add" onclick="addEnvioCoord()">+ Agregar envío a coordinar</button>
+        </div>
+        <div style="border-top:1px solid #e5e7eb; padding-top:14px">
+          <div class="toggle-row">
+            <span class="toggle-label" style="font-size:0.85rem">¿Hay envíos coordinados pendientes de entrega?</span>
+            <div class="toggle">
+              <button id="btn-epend-si" onclick="toggleSec('epend',true)">Sí</button>
+              <button id="btn-epend-no" onclick="toggleSec('epend',false)">No</button>
+            </div>
+          </div>
+          <div id="epend-block" style="display:none">
+            <p class="hint" style="margin-bottom:10px">Detallá cada envío que están esperando recibir para hacer seguimiento.</p>
+            <div id="epend-container"></div>
+            <button class="btn-add" onclick="addEnvioPend()">+ Agregar envío pendiente de entrega</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. CHECKLIST ADMINISTRATIVO -->
+    <div class="section">
+      <div class="section-title">☑️ Checklist Administrativo</div>
+      <p class="hint" style="margin-bottom:14px">Tildá los ítems completados correctamente esta semana.</p>
+      <div id="chk-semana"></div>
+      <p class="chk-counter" id="chk-counter">0 de 5 completados</p>
+      <div class="toggle-row" style="margin-top:20px">
+        <span class="toggle-label" style="font-size:0.85rem">¿Es cierre de mes?</span>
+        <div class="toggle">
+          <button id="btn-fm-si" onclick="toggleSec('fm',true)">Sí</button>
+          <button id="btn-fm-no" onclick="toggleSec('fm',false)">No</button>
+        </div>
+      </div>
+      <div id="fm-block" style="display:none">
+        <div class="finmes-box">
+          <div class="finmes-title">📅 Ítems de Cierre de Mes</div>
+          <div id="chk-finmes"></div>
+          <p class="chk-counter" id="chk-fm-counter" style="color:#1d4ed8">0 de 2 completados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. URGENCIAS -->
+    <div class="section">
+      <div class="section-title">🚨 Urgencias — Requiere Atención Inmediata</div>
+      <p class="hint" style="margin-bottom:12px">Solo para situaciones críticas que necesitan resolución urgente por parte de coordinación.</p>
+      <div class="toggle-row">
+        <span class="toggle-label">¿Hay alguna urgencia esta semana?</span>
+        <div class="toggle">
+          <button id="btn-urg-si" onclick="toggleSec('urg',true)">Sí</button>
+          <button id="btn-urg-no" onclick="toggleSec('urg',false)">No</button>
+        </div>
+      </div>
+      <div id="urg-block" style="display:none">
+        <div id="urg-container"></div>
+        <button class="btn-add btn-add-red" onclick="addUrgencia()">+ Agregar urgencia</button>
+      </div>
+    </div>
+
+    <!-- 8. AVISOS DE COBRO -->
+    <div class="section">
+      <div class="section-title">💰 Avisos de Cobro / Inconsistencias Salariales</div>
+      <div class="toggle-row">
+        <span class="toggle-label">¿Hay inconsistencias en sueldos cobrados?</span>
+        <div class="toggle">
+          <button id="btn-cob-si" onclick="toggleSec('cob',true)">Sí</button>
+          <button id="btn-cob-no" onclick="toggleSec('cob',false)">No</button>
+        </div>
+      </div>
+      <div id="cob-block" style="display:none">
+        <div id="cob-container"></div>
+        <button class="btn-add btn-add-warn" onclick="addAviso()">+ Agregar aviso de cobro</button>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="submitForm()">✅ Enviar Reporte Semanal</button>
+  </div>
+
+  <div id="resumen">
+    <h2>✅ Reporte enviado correctamente</h2>
+    <pre id="resumen-texto"></pre>
+    <button class="btn-nuevo" onclick="resetForm()">📋 Nuevo reporte</button>
+  </div>
+</div>
+
+<script>
+  const chkSemanaItems = [
+    {id:'chk_facturas', label:'Facturas cargadas al día'},
+    {id:'chk_stock',    label:'Stock semanal cargado en tiempo y forma'},
+    {id:'chk_oc',       label:'Corrección de OC realizada en tiempo y forma'},
+    {id:'chk_consumos', label:'Consumos cargados en tiempo y forma'},
+    {id:'chk_gas',      label:'Pedidos de gas realizados en tiempo y forma'},
+  ];
+  const chkFinMesItems = [
+    {id:'chk_anexos',      label:'Anexos enviados'},
+    {id:'chk_consumosmes', label:'Consumos del mes enviados'},
+  ];
+
+  const state = {};
+
+  function toggleSec(key, val) {
+    state[key] = val;
+    document.getElementById(`btn-${key}-si`).className = val ? 'active-yes' : '';
+    document.getElementById(`btn-${key}-no`).className = !val ? 'active-no' : '';
+    document.getElementById(`${key}-block`).style.display = val ? 'block' : 'none';
+    const autoAdd = {aus:addAusencia, menu:addMenu, ecoord:addEnvioCoord, epend:addEnvioPend, urg:addUrgencia, cob:addAviso};
+    const containers = {aus:'aus-container', menu:'menu-container', ecoord:'ecoord-container', epend:'epend-container', urg:'urg-container', cob:'cob-container'};
+    if(val && containers[key] && !document.getElementById(containers[key]).children.length) autoAdd[key]();
+  }
+
+  function addAusencia() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card'; div.id=`aus_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('aus_${id}').remove()">✕ Quitar</button>
+      <div class="grid3" style="margin-top:6px">
+        <div class="field"><label>Colaborador</label><input type="text" id="aus_nom_${id}" placeholder="Nombre"></div>
+        <div class="field"><label>Día/s</label><input type="text" id="aus_dia_${id}" placeholder="Ej: martes y miércoles"></div>
+        <div class="field"><label>Motivo</label><select id="aus_mot_${id}"><option>Enfermedad</option><option>Licencia</option><option>Sin aviso</option><option>Otro</option></select></div>
+      </div>
+      <div class="field"><label>Observaciones</label><input type="text" id="aus_obs_${id}" placeholder="Detalle adicional (opcional)"></div>`;
+    document.getElementById('aus-container').appendChild(div);
+  }
+
+  function addMenu() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card'; div.id=`menu_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('menu_${id}').remove()">✕ Quitar</button>
+      <div class="grid2" style="margin-top:6px">
+        <div class="field"><label>¿Cuál fue el cambio?</label><input type="text" id="mn_cambio_${id}" placeholder="Describí el cambio realizado"></div>
+        <div class="field"><label>Fecha del cambio</label><input type="date" id="mn_fecha_${id}"></div>
+      </div>
+      <div class="field"><label>Causas del cambio</label><textarea id="mn_causas_${id}" placeholder="Indicá los motivos..." style="min-height:65px"></textarea></div>`;
+    document.getElementById('menu-container').appendChild(div);
+  }
+
+  function addEnvioCoord() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card'; div.id=`ec_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('ec_${id}').remove()">✕ Quitar</button>
+      <div class="grid2" style="margin-top:6px">
+        <div class="field"><label>¿Qué necesita enviar?</label><input type="text" id="ec_nec_${id}" placeholder="Describí el envío necesario"></div>
+        <div class="field"><label>¿Para cuándo lo necesita?</label><input type="date" id="ec_fec_${id}"></div>
+      </div>`;
+    document.getElementById('ecoord-container').appendChild(div);
+  }
+
+  function addEnvioPend() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card'; div.id=`ep_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('ep_${id}').remove()">✕ Quitar</button>
+      <div class="field" style="margin-top:6px"><label>¿Qué envío están esperando recibir?</label><textarea id="ep_det_${id}" placeholder="Describí el envío coordinado pendiente de entrega..." style="min-height:65px"></textarea></div>`;
+    document.getElementById('epend-container').appendChild(div);
+  }
+
+  function addUrgencia() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card card-red'; div.id=`urg_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('urg_${id}').remove()">✕ Quitar</button>
+      <div class="urgencia-badge">🚨 Urgente</div>
+      <div class="field"><label>Descripción</label><textarea id="urg_des_${id}" placeholder="Describí claramente el problema..." style="min-height:80px"></textarea></div>
+      <div class="grid2">
+        <div class="field"><label>Área o persona involucrada</label><input type="text" id="urg_are_${id}" placeholder="Ej: proveedor, colaborador..."></div>
+        <div class="field"><label>¿Cuándo debe resolverse?</label><select id="urg_pla_${id}"><option>Hoy mismo</option><option>Dentro de 24 hs</option><option>Esta semana</option></select></div>
+      </div>`;
+    document.getElementById('urg-container').appendChild(div);
+  }
+
+  function addAviso() {
+    const id=Date.now();
+    const div=document.createElement('div');
+    div.className='card card-yellow'; div.id=`cob_${id}`;
+    div.innerHTML=`<button class="btn-remove" onclick="document.getElementById('cob_${id}').remove()">✕ Quitar</button>
+      <div class="grid2" style="margin-top:6px">
+        <div class="field"><label>Colaborador</label><input type="text" id="cob_nom_${id}" placeholder="Nombre"></div>
+        <div class="field"><label>Tipo</label><select id="cob_tip_${id}"><option>Sueldo incorrecto</option><option>Descuento no corresponde</option><option>Horas extras no liquidadas</option><option>Falta de pago</option><option>Otro</option></select></div>
+      </div>
+      <div class="field"><label>Detalle</label><textarea id="cob_det_${id}" style="min-height:60px" placeholder="Describí la inconsistencia..."></textarea></div>`;
+    document.getElementById('cob-container').appendChild(div);
+  }
+
+  function buildChk(cid, items, counterId, cls='') {
+    const c=document.getElementById(cid);
+    items.forEach(item=>{
+      const div=document.createElement('div');
+      div.className='chk-item'+(cls?' '+cls:'');
+      div.innerHTML=`<input type="checkbox" id="${item.id}"><span class="lbl">${item.label}</span><span class="chk-tick">✅</span>`;
+      const cb=div.querySelector('input');
+      div.onclick=e=>{if(e.target.tagName!=='INPUT'){cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));}};
+      cb.addEventListener('change',()=>{
+        div.classList.toggle('checked',cb.checked);
+        const done=document.querySelectorAll(`#${cid} input:checked`).length;
+        document.getElementById(counterId).textContent=`${done} de ${items.length} completados`;
+      });
+      c.appendChild(div);
+    });
+  }
+  buildChk('chk-semana', chkSemanaItems, 'chk-counter');
+  buildChk('chk-finmes', chkFinMesItems, 'chk-fm-counter', 'finmes');
+
+  function getChkStatus(items) {
+    return items.map(i=>`  ${document.getElementById(i.id)?.checked?'✅':'⬜'} ${i.label}`).join('\n');
+  }
+
+  function fmtDate(val) {
+    if(!val) return '—';
+    return new Date(val+'T12:00:00').toLocaleDateString('es-UY',{day:'2-digit',month:'2-digit',year:'numeric'});
+  }
+
+  function submitForm() {
+    const sup=document.getElementById('supervisor').value;
+    const srv=document.getElementById('servicio').value;
+    const fch=document.getElementById('fecha').value;
+    if(!sup||!srv||!fch){alert('Completá Supervisor, Servicio y Fecha antes de enviar.');return;}
+
+    let ausT = state.aus===false?'  Sin ausencias.\n':'';
+    if(state.aus){
+      const items=[...document.querySelectorAll('[id^="aus_nom_"]')];
+      if(!items.length) ausT='  Sin ausencias registradas.\n';
+      else items.forEach(el=>{
+        const n=el.id.replace('aus_nom_','');
+        ausT+=`  • ${el.value||'—'} — ${document.getElementById(`aus_dia_${n}`)?.value||'—'} — ${document.getElementById(`aus_mot_${n}`)?.value||'—'}${document.getElementById(`aus_obs_${n}`)?.value?' ('+document.getElementById(`aus_obs_${n}`).value+')':''}\n`;
+      });
+    }
+
+    let paeT = state.pae===false?'  Sin visita de PAE Media.\n'
+      : state.pae?`  Servicio: ${document.getElementById('pae-servicio').value||'(no indicado)'}\n  Novedades: ${document.getElementById('pae-novedades').value.trim()||'(sin detalle)'}\n`
+      :'  (no indicado)\n';
+
+    let mpT = state.mp===false?'  Sin discrepancias.\n'
+      : state.mp?`  Constató discrepancia entre OC y factura.\n  Detalle: ${document.getElementById('mp-obs').value.trim()||'(sin detalle)'}\n`
+      :'  (no indicado)\n';
+
+    let menuT = state.menu===false?'  Sin cambios de menú.\n':'';
+    if(state.menu){
+      const items=[...document.querySelectorAll('[id^="mn_cambio_"]')];
+      if(!items.length) menuT='  Sin cambios registrados.\n';
+      else items.forEach(el=>{
+        const n=el.id.replace('mn_cambio_','');
+        menuT+=`  • ${el.value||'—'} | Fecha: ${fmtDate(document.getElementById(`mn_fecha_${n}`)?.value)}\n    Causas: ${document.getElementById(`mn_causas_${n}`)?.value||'—'}\n`;
+      });
+    }
+
+    let ecoordT = state.ecoord===false?'  Sin envíos a coordinar.\n':'';
+    if(state.ecoord){
+      const items=[...document.querySelectorAll('[id^="ec_nec_"]')];
+      if(!items.length) ecoordT='  Sin envíos registrados.\n';
+      else items.forEach(el=>{
+        const n=el.id.replace('ec_nec_','');
+        ecoordT+=`  • ${el.value||'—'} — Para: ${fmtDate(document.getElementById(`ec_fec_${n}`)?.value)}\n`;
+      });
+    }
+
+    let ependT = state.epend===false?'  Sin envíos pendientes.\n':'';
+    if(state.epend){
+      const items=[...document.querySelectorAll('[id^="ep_det_"]')];
+      if(!items.length) ependT='  Sin envíos registrados.\n';
+      else items.forEach(el=>{ ependT+=`  • ${el.value||'—'}\n`; });
+    }
+
+    let urgT = state.urg===false?'  Sin urgencias.\n':'';
+    if(state.urg){
+      const items=[...document.querySelectorAll('[id^="urg_des_"]')];
+      if(!items.length) urgT='  Sin urgencias registradas.\n';
+      else items.forEach(el=>{
+        const n=el.id.replace('urg_des_','');
+        urgT+=`  🚨 ${el.value||'—'}\n     Involucrado: ${document.getElementById(`urg_are_${n}`)?.value||'—'} | Plazo: ${document.getElementById(`urg_pla_${n}`)?.value||'—'}\n`;
+      });
+    }
+
+    let cobT = state.cob===false?'  Sin inconsistencias salariales.\n':'';
+    if(state.cob){
+      const items=[...document.querySelectorAll('[id^="cob_nom_"]')];
+      if(!items.length) cobT='  Sin avisos registrados.\n';
+      else items.forEach(el=>{
+        const n=el.id.replace('cob_nom_','');
+        cobT+=`  • ${el.value||'—'} — ${document.getElementById(`cob_tip_${n}`)?.value||'—'}\n    ${document.getElementById(`cob_det_${n}`)?.value||'—'}\n`;
+      });
+    }
+
+    const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
+
+    document.getElementById('resumen-texto').textContent=
+`REPORTE SEMANAL
+═══════════════════════════════════════
+Supervisor : ${sup}
+Servicio   : ${srv}
+Semana     : ${fmtDate(fch)}
+═══════════════════════════════════════
+
+📣 NOVEDADES
+${document.getElementById('novedades').value.trim()||'—'}
+
+🗂 PENDIENTES PRÓXIMA SEMANA
+${document.getElementById('pendientes').value.trim()||'—'}
+
+👥 RECURSOS LABORALES
+${ausT}
+🏥 VISITA PAE MEDIA
+${paeT}
+🔍 SEGUIMIENTO OPERATIVO
+
+  Faltante de MP:
+${mpT}
+  Cambio de menú:
+${menuT||'  (no indicado)\n'}
+  📦 Envíos a coordinar:
+${ecoordT||'  (no indicado)\n'}
+  📬 Envíos pendientes de entrega:
+${ependT||'  (no indicado)\n'}
+☑️ CHECKLIST ADMINISTRATIVO
+${getChkStatus(chkSemanaItems)}${chkFM}
+
+🚨 URGENCIAS
+${urgT}
+💰 AVISOS DE COBRO
+${cobT}
+═══════════════════════════════════════`;
+
+    document.getElementById('resumen').style.display='block';
+    document.querySelector('.form-body').style.display='none';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function resetForm() {
+    document.getElementById('resumen').style.display='none';
+    document.querySelector('.form-body').style.display='block';
+    document.getElementById('supervisor').value='';
+    document.getElementById('servicio').value='';
+    document.getElementById('fecha').value=new Date().toISOString().split('T')[0];
+    ['novedades','pendientes','pae-novedades','mp-obs'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('pae-servicio').value='';
+    ['aus','pae','mp','menu','ecoord','epend','fm','urg','cob'].forEach(k=>{
+      state[k]=null;
+      document.getElementById(`btn-${k}-si`).className='';
+      document.getElementById(`btn-${k}-no`).className='';
+      document.getElementById(`${k}-block`).style.display='none';
+    });
+    ['aus-container','menu-container','ecoord-container','epend-container','urg-container','cob-container'].forEach(id=>document.getElementById(id).innerHTML='');
+    document.querySelectorAll('.chk-item').forEach(el=>{el.classList.remove('checked');el.querySelector('input').checked=false;});
+    document.getElementById('chk-counter').textContent='0 de 5 completados';
+    document.getElementById('chk-fm-counter').textContent='0 de 2 completados';
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  document.getElementById('fecha').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
