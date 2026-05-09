@@ -496,7 +496,7 @@
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
     // Enviar datos al servidor
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxP6J0cDUf_rOfs1i4RnV0UnDF81XKi57AO_zrdEZjE1xS-q-DfKCv7EJDMLEVZlfOo/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5rGTJLFFAhKbOktj5Vv-QTpNI0b1KTeX-fqXCXQBtGdun1nvLSXwQXZ0G4Y55-YmZ/exec";
     const payload = {
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
@@ -512,8 +512,22 @@
       finMes: state.fm ? getChkStatus(chkFinMesItems) : "",
       urgencias: urgT, cobros: cobT
     };
-    fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) })
-      .catch(()=>{}); // silencioso, no bloquea la UI
+
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = SCRIPT_URL;
+    form.target = 'hidden_iframe';
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'data';
+    input.value = JSON.stringify(payload);
+    form.appendChild(input);
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    document.body.appendChild(form);
+    form.submit();
 
     document.getElementById('resumen-texto').textContent=
 `REPORTE SEMANAL
