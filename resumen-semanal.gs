@@ -23,7 +23,7 @@ const CONFIG = {
     },
     {
       nombre: 'Ximena',
-      email: 'PONER_EMAIL_DE_XIMENA_AQUI',
+      email: 'ximenaboragno@gmail.com',
       servicios: ['Liceo 4 Melo', 'Liceo 5 Melo', 'UTU Melo', 'Liceo Treinta y Tres',
                   'Liceo Santa Clara', 'Liceo Cerro Chato', 'Liceo Pintadito',
                   'Liceo Young 2', 'Liceo San Javier'],
