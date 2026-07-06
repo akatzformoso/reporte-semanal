@@ -16,7 +16,8 @@ function doGet(e) {
                 "Ausencias", "PAE", "Urgencias", "Cobros"];
   const EXTRA = ["Semana", "PAEServicio", "PAENovedades", "FaltanteMP",
                  "FaltanteMPDetalle", "CambioMenu", "CambioMenuDetalle",
-                 "EnviosCoordinar", "EnviosPendientes", "Checklist", "CierreMes"];
+                 "EnviosCoordinar", "EnviosPendientes", "Checklist", "CierreMes",
+                 "Cronograma"];
 
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sheet = ss.getSheetByName("Reportes");
@@ -50,7 +51,8 @@ function doGet(e) {
     p.enviosCoordinar || "",
     p.enviosPendientes || "",
     p.checklist || "",
-    p.finMes || ""
+    p.finMes || "",
+    p.cronograma || ""
   ]);
   return ContentService.createTextOutput("OK");
 }

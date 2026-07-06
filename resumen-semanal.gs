@@ -141,9 +141,10 @@ function armarHtml(resp, filas, val) {
   }
   h += bloque('📅 Cierre de mes', filas, val, 'cierremes');
 
-  // Novedades y pendientes
+  // Novedades, pendientes y cronograma
   h += bloque('📣 Novedades', filas, val, 'novedades');
   h += bloque('🗂 Pendientes para la próxima semana', filas, val, 'pendientes');
+  h += bloque('🗓 Cronograma próxima semana', filas, val, 'cronograma');
 
   h += '<hr style="border:none;border-top:1px solid #e5e7eb;margin-top:24px">';
   h += '<p style="font-size:12px;color:#6b7280">Generado automáticamente desde la planilla de reportes semanales.</p></div>';
@@ -159,7 +160,7 @@ function seccion(titulo) {
 function tieneContenido(texto) {
   const t = String(texto || '').trim();
   if (!t) return false;
-  const vacios = ['sin ', '(no indicado)', '—', '-'];
+  const vacios = ['sin ', '(sin', '(no indicado)', '—', '-'];
   const tl = t.toLowerCase();
   return !vacios.some(v => tl.indexOf(v) === 0);
 }

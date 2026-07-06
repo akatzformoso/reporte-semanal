@@ -129,6 +129,17 @@
       </div>
     </div>
 
+    <!-- 2b. CRONOGRAMA PRÓXIMA SEMANA -->
+    <div class="section">
+      <div class="section-title">🗓 Cronograma Próxima Semana</div>
+      <p class="hint" style="margin-bottom:14px">Detallá tu plan de agenda día a día para la semana entrante. Dejá en blanco los días sin actividades.</p>
+      <div class="field"><label>Lunes</label><input type="text" id="cron_lun" placeholder="Plan del lunes..."></div>
+      <div class="field"><label>Martes</label><input type="text" id="cron_mar" placeholder="Plan del martes..."></div>
+      <div class="field"><label>Miércoles</label><input type="text" id="cron_mie" placeholder="Plan del miércoles..."></div>
+      <div class="field"><label>Jueves</label><input type="text" id="cron_jue" placeholder="Plan del jueves..."></div>
+      <div class="field"><label>Viernes</label><input type="text" id="cron_vie" placeholder="Plan del viernes..."></div>
+    </div>
+
     <!-- 3. RECURSOS LABORALES -->
     <div class="section">
       <div class="section-title">👥 Recursos Laborales</div>
@@ -509,6 +520,13 @@
       });
     }
 
+    let cronT='';
+    [['cron_lun','Lunes'],['cron_mar','Martes'],['cron_mie','Miércoles'],['cron_jue','Jueves'],['cron_vie','Viernes']].forEach(par=>{
+      const v=document.getElementById(par[0]).value.trim();
+      if(v) cronT+=`  ${par[1]}: ${v}\n`;
+    });
+    if(!cronT) cronT='  (sin cronograma)\n';
+
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
     // Enviar datos al servidor
@@ -518,6 +536,7 @@
       fecha: fmtDate(fch), supervisor: sup, servicio: srv,
       novedades: document.getElementById('novedades').value.trim(),
       pendientes: document.getElementById('pendientes').value.trim(),
+      cronograma: cronT,
       ausencias: ausT, hayPAE: state.pae ? "Sí" : "No",
       paeServicio: document.getElementById('pae-servicio').value,
       paeNovedades: document.getElementById('pae-novedades').value.trim(),
@@ -556,6 +575,8 @@ ${document.getElementById('novedades').value.trim()||'—'}
 🗂 PENDIENTES PRÓXIMA SEMANA
 ${document.getElementById('pendientes').value.trim()||'—'}
 
+🗓 CRONOGRAMA PRÓXIMA SEMANA
+${cronT}
 👥 RECURSOS LABORALES
 ${ausT}
 🏥 VISITA PAE MEDIA
@@ -590,7 +611,7 @@ ${cobT}
     document.getElementById('supervisor').value='';
     document.getElementById('servicio').value='';
     document.getElementById('fecha').value=new Date().toISOString().split('T')[0];
-    ['novedades','pendientes','pae-novedades','mp-obs'].forEach(id=>document.getElementById(id).value='');
+    ['novedades','pendientes','pae-novedades','mp-obs','cron_lun','cron_mar','cron_mie','cron_jue','cron_vie'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('pae-servicio').value='';
     ['aus','pae','mp','menu','ecoord','epend','fm','urg','cob'].forEach(k=>{
       state[k]=null;
