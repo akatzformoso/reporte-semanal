@@ -4,32 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reporte Semanal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Kufam:wght@400;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; min-height: 100vh; padding: 24px 16px; }
+  body { font-family: 'Montserrat', 'Segoe UI', sans-serif; background: #f3eee2 url('fondo-iconos.webp') repeat fixed; background-size: 520px auto; min-height: 100vh; padding: 20px 16px 40px; }
   .container { max-width: 820px; margin: 0 auto; }
-  .header { background: white; border-top: 6px solid #339999; border-bottom: 1px solid #eef2f2; border-radius: 12px 12px 0 0; padding: 22px 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-  .header .fila { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  .brand { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1; }
+  .topbar { max-width: 820px; margin: 0 auto 14px; padding: 2px 4px; }
+  .hero { background: linear-gradient(130deg, #1f6b69, #339999 70%, #46b0ae); border-radius: 20px; padding: 34px 34px 30px; color: white; margin-bottom: 20px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(31,107,105,0.25); }
+  .hero::before { content: ''; position: absolute; inset: 0; background: url('fondo-iconos.webp') repeat; background-size: 340px auto; opacity: 0.55; }
+  .hero h1, .hero p { position: relative; }
+  .hero h1 { font-family: 'Kaushan Script', cursive; font-size: 2.5rem; font-weight: 400; color: white; line-height: 1.2; text-shadow: 1px 2px 8px rgba(0,0,0,0.25); }
+  .hero p { margin-top: 8px; font-size: 0.95rem; color: #d9efee; font-weight: 600; }
   @media (max-width: 560px) {
-    .header { padding: 18px 20px; }
-    .header .fila img { height: 46px !important; }
-    .header h1 { font-size: 1.15rem; }
-    .app-icon { width: 40px; height: 40px; }
+    .hero { padding: 26px 24px 24px; }
+    .hero h1 { font-size: 1.9rem; }
+    .topbar img { height: 40px !important; }
   }
-  .app-icon { flex-shrink: 0; width: 46px; height: 46px; border-radius: 12px; background: linear-gradient(135deg, #257a78, #339999); display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 8px rgba(51,153,153,0.35); }
-  .header h1 { font-size: 1.4rem; font-weight: 800; color: #173f3e; letter-spacing: 0.2px; line-height: 1.2; }
-  .header p { margin-top: 3px; font-size: 0.88rem; color: #6b7280; }
-  .form-body { background: white; border-radius: 0 0 12px 12px; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
-  .section { margin-bottom: 32px; border-bottom: 1px solid #f0f4f8; padding-bottom: 32px; }
-  .section:last-of-type { border-bottom: none; }
-  .section-title { font-size: 1rem; font-weight: 700; color: #1f5c5c; border-left: 4px solid #339999; padding-left: 12px; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .form-body { background: transparent; padding: 0; }
+  .section { background: white; border-radius: 18px; padding: 26px 28px; margin-bottom: 16px; box-shadow: 0 3px 14px rgba(31,92,92,0.07); }
+  .section-title { font-family: 'Kufam', sans-serif; font-size: 0.98rem; font-weight: 700; color: #257a78; margin-bottom: 18px; letter-spacing: 0.3px; text-transform: uppercase; display: flex; align-items: center; gap: 11px; }
+  .st-icon { width: 34px; height: 34px; border-radius: 10px; background: #e7f3f2; color: #2b8886; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .st-icon svg { width: 19px; height: 19px; }
+  .st-icon.rojo { background: #fdeeee; color: #dc2626; }
+  .st-icon.ambar { background: #fdf3e0; color: #d97706; }
+  .section-title::after { content: ''; flex: 1; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #cde8e7, transparent); }
   .field { margin-bottom: 14px; }
   .field:last-child { margin-bottom: 0; }
   label { display: block; font-size: 0.85rem; font-weight: 600; color: #374151; margin-bottom: 5px; }
   input[type="text"], input[type="date"], input[type="number"], select, textarea {
-    width: 100%; padding: 9px 13px; border: 1.5px solid #d1d5db; border-radius: 8px;
-    font-size: 0.88rem; color: #111; transition: border-color 0.2s; background: #fafafa; font-family: inherit;
+    width: 100%; padding: 10px 14px; border: 1.5px solid #e2dbc9; border-radius: 12px;
+    font-size: 0.88rem; color: #111; transition: border-color 0.2s; background: #fbfaf5; font-family: inherit;
   }
   input:focus, select:focus, textarea:focus { outline: none; border-color: #339999; background: white; }
   textarea { resize: vertical; min-height: 80px; }
@@ -41,7 +47,7 @@
   .toggle button { padding: 6px 18px; border: 1.5px solid #d1d5db; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #6b7280; transition: all 0.2s; }
   .toggle button.active-yes { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
   .toggle button.active-no { border-color: #339999; background: #eef7f6; color: #339999; }
-  .card { background: #f9fafb; border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 16px; margin-bottom: 10px; }
+  .card { background: #faf8f1; border: 1.5px solid #eae4d3; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
   .card-yellow { background: #fffbeb; border-color: #fde68a; }
   .card-red { background: #fff1f2; border-color: #fca5a5; }
   .btn-remove { background: none; border: none; color: #dc2626; cursor: pointer; font-size: 0.82rem; font-weight: 700; float: right; }
@@ -49,7 +55,7 @@
   .btn-add-warn { border-color: #d97706; color: #d97706; }
   .btn-add-red { border-color: #dc2626; color: #dc2626; }
   .urgencia-badge { display: inline-block; background: #dc2626; color: white; font-size: 0.7rem; font-weight: 700; padding: 2px 10px; border-radius: 20px; margin-bottom: 10px; text-transform: uppercase; }
-  .chk-item { display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:8px; margin-bottom:7px; background:#f9fafb; border:1.5px solid #e5e7eb; cursor:pointer; user-select:none; transition:all 0.15s; }
+  .chk-item { display:flex; align-items:center; gap:12px; padding:11px 14px; border-radius:12px; margin-bottom:7px; background:#faf8f1; border:1.5px solid #eae4d3; cursor:pointer; user-select:none; transition:all 0.15s; }
   .chk-item:hover { border-color:#93c5fd; background:#f0f7ff; }
   .chk-item.checked { background:#eef7f6; border-color:#9ed3d2; }
   .chk-item input[type="checkbox"] { width:17px; height:17px; accent-color:#339999; cursor:pointer; flex-shrink:0; }
@@ -67,8 +73,12 @@
   .required { color:#dc2626; }
   .hint { font-size:0.77rem; color:#6b7280; }
   .card-title { font-size:0.88rem; font-weight:700; color:#1f5c5c; margin-bottom:4px; }
-  .btn-submit { width:100%; padding:14px; background:linear-gradient(135deg,#1f5c5c,#339999); color:white; border:none; border-radius:10px; font-size:1rem; font-weight:700; cursor:pointer; margin-top:8px; transition:opacity 0.2s; }
-  .btn-submit:hover { opacity:0.9; }
+  .btn-submit { width:100%; padding:16px; background:linear-gradient(135deg,#1f6b69,#339999); color:white; border:none; border-radius:999px; font-size:1rem; font-weight:700; font-family:'Kufam',sans-serif; letter-spacing:0.3px; cursor:pointer; margin-top:10px; box-shadow:0 8px 20px rgba(31,107,105,0.3); transition:transform 0.15s, box-shadow 0.15s; display:flex; align-items:center; justify-content:center; gap:12px; }
+  .btn-submit svg { transition: transform 0.2s; flex-shrink:0; }
+  .btn-submit:hover { transform: translateY(-2px); box-shadow:0 12px 26px rgba(31,107,105,0.35); }
+  .btn-submit:hover svg { transform: translateX(5px); }
+  .btn-submit:active { transform: translateY(0) scale(0.985); box-shadow:0 5px 14px rgba(31,107,105,0.3); }
+  .btn-submit:focus-visible { outline: 3px solid #9ed3d2; outline-offset: 3px; }
   #resumen { display:none; background:#eef7f6; border:2px solid #339999; border-radius:12px; padding:28px; margin-top:24px; }
   #resumen h2 { color:#257a78; margin-bottom:16px; }
   #resumen pre { font-family:'Segoe UI',sans-serif; font-size:0.87rem; color:#1f2937; white-space:pre-wrap; line-height:1.75; }
@@ -77,23 +87,19 @@
 </head>
 <body>
 <div class="container">
-  <div class="header">
-    <div class="fila">
-      <div class="brand">
-        <div class="app-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 8h10M7 12h10M7 16h6"/></svg></div>
-        <div>
-          <h1>Sistema de Reporte Semanal</h1>
-          <p>Completar cada viernes al cierre de la semana</p>
-        </div>
-      </div>
-      <img src="https://akatzformoso.github.io/reporte-semanal/logo.png" alt="BFlow" style="height:64px; object-fit:contain;">
-    </div>
+  <div class="topbar" style="display:flex; align-items:baseline; gap:10px;">
+    <img src="logo-ble-letras.svg" alt="Blé" style="height:46px; object-fit:contain;">
+    <span style="font-family:'Kaushan Script',cursive; color:#339999; font-size:1.15rem;">como en casa!</span>
+  </div>
+  <div class="hero">
+    <h1>Sistema de Reporte Semanal</h1>
+    <p>Completar cada viernes al cierre de la semana</p>
   </div>
   <div class="form-body">
 
     <!-- 1. DATOS GENERALES -->
     <div class="section">
-      <div class="section-title">📌 Datos Generales</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>Datos Generales</div>
       <div class="grid2">
         <div class="field">
           <label>Supervisor <span class="required">*</span></label>
@@ -128,7 +134,7 @@
 
     <!-- 2. NOVEDADES -->
     <div class="section">
-      <div class="section-title">📣 Novedades de la Semana</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 13v-2Z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>Novedades de la Semana</div>
       <div class="field">
         <label>Novedades relevantes del servicio</label>
         <textarea id="novedades" placeholder="Describí las novedades más importantes de la semana..."></textarea>
@@ -141,7 +147,7 @@
 
     <!-- 2b. CRONOGRAMA PRÓXIMA SEMANA -->
     <div class="section">
-      <div class="section-title">🗓 Cronograma Próxima Semana</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Cronograma Próxima Semana</div>
       <p class="hint" style="margin-bottom:14px">Detallá tu plan de agenda día a día para la semana entrante. Dejá en blanco los días sin actividades.</p>
       <div class="field"><label>Lunes</label><input type="text" id="cron_lun" placeholder="Plan del lunes..."></div>
       <div class="field"><label>Martes</label><input type="text" id="cron_mar" placeholder="Plan del martes..."></div>
@@ -152,7 +158,7 @@
 
     <!-- 3. RECURSOS LABORALES -->
     <div class="section">
-      <div class="section-title">👥 Recursos Laborales</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>Recursos Laborales</div>
       <div class="toggle-row">
         <span class="toggle-label">¿Hubo ausencias esta semana?</span>
         <div class="toggle">
@@ -168,7 +174,7 @@
 
     <!-- 4. VISITA PAE MEDIA -->
     <div class="section">
-      <div class="section-title">🏥 Visita PAE Media</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.06 12.35a1 1 0 0 1 0-.7 10.75 10.75 0 0 1 19.88 0 1 1 0 0 1 0 .7 10.75 10.75 0 0 1-19.88 0"/><circle cx="12" cy="12" r="3"/></svg></span>Visita PAE Media</div>
       <div class="toggle-row">
         <span class="toggle-label">¿Hubo visita de PAE Media esta semana?</span>
         <div class="toggle">
@@ -198,7 +204,7 @@
 
     <!-- 5. SEGUIMIENTO OPERATIVO -->
     <div class="section">
-      <div class="section-title">🔍 Seguimiento Operativo</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>Seguimiento Operativo</div>
 
       <!-- Faltante MP -->
       <div class="card" style="margin-bottom:14px">
@@ -268,7 +274,7 @@
 
     <!-- 6. CHECKLIST ADMINISTRATIVO -->
     <div class="section">
-      <div class="section-title">☑️ Checklist Administrativo</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>Checklist Administrativo</div>
       <p class="hint" style="margin-bottom:14px">Tildá los ítems completados correctamente esta semana.</p>
       <div id="chk-semana"></div>
       <p class="chk-counter" id="chk-counter">0 de 5 completados</p>
@@ -290,7 +296,7 @@
 
     <!-- 7. URGENCIAS -->
     <div class="section">
-      <div class="section-title">🚨 Urgencias — Requiere Atención Inmediata</div>
+      <div class="section-title"><span class="st-icon rojo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 20h16a2 2 0 0 0 1.73-2Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>Urgencias — Requiere Atención Inmediata</div>
       <p class="hint" style="margin-bottom:12px">Solo para situaciones críticas que necesitan resolución urgente por parte de coordinación.</p>
       <div class="toggle-row">
         <span class="toggle-label">¿Hay alguna urgencia esta semana?</span>
@@ -307,7 +313,7 @@
 
     <!-- 8. AVISOS DE COBRO -->
     <div class="section">
-      <div class="section-title">💰 Avisos de Cobro / Inconsistencias Salariales</div>
+      <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg></span>Avisos de Cobro / Inconsistencias Salariales</div>
       <div class="toggle-row">
         <span class="toggle-label">¿Hay inconsistencias en sueldos cobrados?</span>
         <div class="toggle">
@@ -321,7 +327,7 @@
       </div>
     </div>
 
-    <button class="btn-submit" onclick="submitForm()">✅ Enviar Reporte Semanal</button>
+    <button class="btn-submit" onclick="submitForm()"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4Z"/></svg>Enviar Reporte Semanal</button>
   </div>
 
   <div id="resumen">
