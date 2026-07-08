@@ -141,10 +141,23 @@ function armarHtml(resp, filas, val) {
   }
   h += bloque('📅 Cierre de mes', filas, val, 'cierremes');
 
-  // Novedades, pendientes y cronograma
+  // Novedades y pendientes
   h += bloque('📣 Novedades', filas, val, 'novedades');
   h += bloque('🗂 Pendientes para la próxima semana', filas, val, 'pendientes');
-  h += bloque('🗓 Cronograma próxima semana', filas, val, 'cronograma');
+
+  // Cronograma: es UNO por supervisor (lo carga en cualquiera de sus reportes),
+  // así que se agrupa por supervisor y se toma el primero con contenido.
+  const cronPorSup = {};
+  filas.forEach(f => {
+    const sup = val(f, 'supervisor') || '(sin nombre)';
+    if (!cronPorSup[sup] && tieneContenido(val(f, 'cronograma'))) cronPorSup[sup] = val(f, 'cronograma');
+  });
+  if (Object.keys(cronPorSup).length) {
+    h += seccion('🗓 Cronograma próxima semana (por supervisor)');
+    Object.keys(cronPorSup).forEach(sup => {
+      h += '<p><b>' + escaparHtml(sup) + ':</b><br>' + escaparHtml(cronPorSup[sup]).replace(/\n/g, '<br>') + '</p>';
+    });
+  }
 
   h += '<hr style="border:none;border-top:1px solid #e5e7eb;margin-top:24px">';
   h += '<p style="font-size:12px;color:#6b7280">Generado automáticamente desde la planilla de reportes semanales.</p></div>';

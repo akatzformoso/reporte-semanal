@@ -46,6 +46,7 @@
   .toggle { display: flex; gap: 8px; }
   .toggle button { padding: 6px 18px; border: 1.5px solid #d1d5db; border-radius: 20px; background: white; cursor: pointer; font-size: 0.85rem; font-weight: 600; color: #6b7280; transition: all 0.2s; }
   .toggle button.active-yes { border-color: #dc2626; background: #fef2f2; color: #dc2626; }
+  #btn-cron-si.active-yes { border-color: #339999; background: #eef7f6; color: #257a78; }
   .toggle button.active-no { border-color: #339999; background: #eef7f6; color: #339999; }
   .card { background: #faf8f1; border: 1.5px solid #eae4d3; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
   .card-yellow { background: #fffbeb; border-color: #fde68a; }
@@ -148,12 +149,21 @@
     <!-- 2b. CRONOGRAMA PRÓXIMA SEMANA -->
     <div class="section">
       <div class="section-title"><span class="st-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Cronograma Próxima Semana</div>
-      <p class="hint" style="margin-bottom:14px">Detallá tu plan de agenda día a día para la semana entrante. Dejá en blanco los días sin actividades.</p>
-      <div class="field"><label>Lunes</label><input type="text" id="cron_lun" placeholder="Plan del lunes..."></div>
-      <div class="field"><label>Martes</label><input type="text" id="cron_mar" placeholder="Plan del martes..."></div>
-      <div class="field"><label>Miércoles</label><input type="text" id="cron_mie" placeholder="Plan del miércoles..."></div>
-      <div class="field"><label>Jueves</label><input type="text" id="cron_jue" placeholder="Plan del jueves..."></div>
-      <div class="field"><label>Viernes</label><input type="text" id="cron_vie" placeholder="Plan del viernes..."></div>
+      <p class="hint" style="margin-bottom:14px">Es tu agenda personal de la semana entrante, con <b>todos tus servicios</b>. Se carga <b>una sola vez por semana</b>, en uno solo de tus reportes.</p>
+      <div class="toggle-row">
+        <span class="toggle-label">¿Cargás tu cronograma en este reporte?</span>
+        <div class="toggle">
+          <button id="btn-cron-si" onclick="toggleSec('cron',true)">Sí</button>
+          <button id="btn-cron-no" onclick="toggleSec('cron',false)">No</button>
+        </div>
+      </div>
+      <div id="cron-block" style="display:none">
+        <div class="field"><label>Lunes</label><input type="text" id="cron_lun" placeholder="Ej: Rivera — visita de supervisión + reunión con la dirección"></div>
+        <div class="field"><label>Martes</label><input type="text" id="cron_mar"></div>
+        <div class="field"><label>Miércoles</label><input type="text" id="cron_mie"></div>
+        <div class="field"><label>Jueves</label><input type="text" id="cron_jue"></div>
+        <div class="field"><label>Viernes</label><input type="text" id="cron_vie"></div>
+      </div>
     </div>
 
     <!-- 3. RECURSOS LABORALES -->
@@ -537,11 +547,13 @@
     }
 
     let cronT='';
-    [['cron_lun','Lunes'],['cron_mar','Martes'],['cron_mie','Miércoles'],['cron_jue','Jueves'],['cron_vie','Viernes']].forEach(par=>{
-      const v=document.getElementById(par[0]).value.trim();
-      if(v) cronT+=`  ${par[1]}: ${v}\n`;
-    });
-    if(!cronT) cronT='  (sin cronograma)\n';
+    if(state.cron){
+      [['cron_lun','Lunes'],['cron_mar','Martes'],['cron_mie','Miércoles'],['cron_jue','Jueves'],['cron_vie','Viernes']].forEach(par=>{
+        const v=document.getElementById(par[0]).value.trim();
+        if(v) cronT+=`  ${par[1]}: ${v}\n`;
+      });
+    }
+    if(!cronT) cronT='  (sin cronograma en este reporte)\n';
 
     const chkFM = state.fm ? '\n📅 CIERRE DE MES\n'+getChkStatus(chkFinMesItems) : '';
 
@@ -629,7 +641,7 @@ ${cobT}
     document.getElementById('fecha').value=new Date().toISOString().split('T')[0];
     ['novedades','pendientes','pae-novedades','mp-obs','cron_lun','cron_mar','cron_mie','cron_jue','cron_vie'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('pae-servicio').value='';
-    ['aus','pae','mp','menu','ecoord','epend','fm','urg','cob'].forEach(k=>{
+    ['aus','pae','mp','menu','ecoord','epend','fm','urg','cob','cron'].forEach(k=>{
       state[k]=null;
       document.getElementById(`btn-${k}-si`).className='';
       document.getElementById(`btn-${k}-no`).className='';
